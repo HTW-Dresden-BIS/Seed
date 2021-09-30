@@ -75,6 +75,11 @@ namespace Seed
             // some statistics
             var group = materials.Operations.GroupBy(x => new { x.Node.Id }).Select(g => new { Key = g.Key, Count = g.Count() });
             var average = group.Average(x => x.Count);
+
+
+            var incommingCount = materials.NodesInUse.TrueForAll(x => x.IncomingEdges.Count == x.IncomingEdgeIds.Count());
+            var outgoiingCount = materials.NodesInUse.TrueForAll(x => x.OutgoingEdges.Count == x.OutgoingEdgeIds.Count());
+            WriteIf(Quiet, materials.NodesInUse.Count + " materials created");
             WriteIf(Quiet, materials.Operations.Count + " operations created");
             WriteIf(Quiet, average + " average operations distributed over " + group.Count() + " materials.");
             WriteIf(Quiet, transitionMatrix.GetOrganizationalDegree() + " organizational degree on generated matrix");

@@ -26,6 +26,6 @@ namespace Seed.Data
         public List<MaterialNodeOperation> Operations { get; set; }
         public double Cost { get; set;}
         public List<int> IncomingEdgeIds => IncomingEdges.Select(x => x.Id).ToList();
-        public List<int> OutgoingEdgeIds => IncomingEdges.Select(x => x.Id).ToList();
+        public List<int> OutgoingEdgeIds => OutgoingEdges.Select(x => x.Id).ToList();
     }
 }

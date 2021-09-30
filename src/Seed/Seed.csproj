@@ -12,11 +12,12 @@
     <Description>A Master Data gernerator for Products, Materials and Operations.</Description>
     <PackageProjectUrl>https://github.com/HTW-Dresden-BIS/Seed</PackageProjectUrl>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <Version>$(VersionPrefix)1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="" />
-    <None Include="LICENSE" Pack="true" PackagePath=""/>
+    <None Include="LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

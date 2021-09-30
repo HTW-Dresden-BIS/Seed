@@ -30,7 +30,7 @@ namespace Seed.Test.OperationStructure
         }
 
         [Theory]
-        [InlineData(1000, 1, true)]
+        [InlineData(100, 1, true)]
         public void GenerateOperations(int numberOfOperations, int seed, bool withOut)
         {
 
@@ -66,6 +66,7 @@ namespace Seed.Test.OperationStructure
             var group = material.Operations.GroupBy(x => new { x.Node.Id }).Select(g => new { Key = g.Key, Count = g.Count() });
             var average = group.Average(x => x.Count);
 
+            WriteIf(withOut, material.NodesInUse.Count() + " Materials created");
             WriteIf(withOut, _numberOfOperationsCreated + " Operations created");
             WriteIf(withOut, average + " Operations per Material " + group.Count());
             WriteIf(withOut, "Organizational Degree on Generated Matrix    : " + _operationFixture.TransitionMatrix.GetOrganizationalDegree());
