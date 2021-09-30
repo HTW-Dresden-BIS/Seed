@@ -30,8 +30,10 @@ namespace Seed.Test.DefaultConfiguration
 
             var rsDrill = new ResourceGroup("Drill")
                 .WithResourceuQuantity(1)
-                .WithDefaultDurationMean(TimeSpan.FromMinutes(5))
-                .WithDefaultDurationVariance(0.20)
+                .WithDefaultOperationDurationMean(TimeSpan.FromMinutes(5))
+                .WithDefaultOperationDurationVariance(0.20)
+                .WithDefaultSetupDurationMean(TimeSpan.FromMinutes(10))
+                .WithDefaultSetupDurationVariance(0)
                 .WithTools(new List<ResourceTool> {
                     new ResourceTool("Head 10mm"),
                     new ResourceTool("Head 15mm"),
@@ -40,6 +42,8 @@ namespace Seed.Test.DefaultConfiguration
 
             var rsAssembly = new ResourceGroup("Assembly")
                 .WithResourceuQuantity(3)
+                .WithDefaultSetupDurationMean(TimeSpan.FromMinutes(10))
+                .WithDefaultSetupDurationVariance(0)
                 .WithTools(new List<ResourceTool> {
                     new ResourceTool("Screwing").WithOperationDurationAverage(TimeSpan.FromMinutes(5)).WithOperationDurationVariance(0.20),
                     new ResourceTool("Glueing").WithOperationDurationAverage(TimeSpan.FromMinutes(10)).WithOperationDurationVariance(0.20),
@@ -50,8 +54,8 @@ namespace Seed.Test.DefaultConfiguration
             var rsColoring = new ResourceGroup("Paint")
                 .WithResourceuQuantity(1)
                 .WithTools(new List<ResourceTool> {
-                    new ResourceTool("Grounding"),
-                    new ResourceTool("Coloring"),
+                    new ResourceTool("Grounding").WithSetupDurationAverage(TimeSpan.FromMinutes(10)).WithSetupDurationVariance(0),
+                    new ResourceTool("Coloring").WithSetupDurationAverage(TimeSpan.FromMinutes(15)).WithSetupDurationVariance(0.2),
                 });
 
             return new ResourceConfig().WithResourceGroup(new List<ResourceGroup> { rsSaw, rsDrill, rsAssembly, rsColoring })

@@ -37,6 +37,10 @@
         "Mean": 300,
         "Variance": 0.2
       },
+      "SetupDurationDistributionParameter": {
+          "Mean": 600,
+          "Variance": 0.2
+      },
       "Tools": [
         {
           "Name": "Head 10mm"
@@ -55,6 +59,10 @@
       "OperationDurationDistributionParameter": {
         "Mean": 0,
         "Variance": 0
+      },
+      "SetupDurationDistributionParameter": {
+        "Mean": 600,
+        "Variance": 0.2
       },
       "Tools": [
         {
@@ -99,10 +107,18 @@
       },
       "Tools": [
         {
-          "Name": "Grounding"
+          "Name": "Grounding",
+          "SetupDurationDistributionParameter": {
+            "Mean": 900,
+            "Variance": 0.2
+          }
         },
         {
-          "Name": "Coloring"
+          "Name": "Coloring",
+          "SetupDurationDistributionParameter": {
+            "Mean": 600,
+            "Variance": 0.2
+          }
         }
       ]
     }
@@ -116,6 +132,10 @@
   },
   "DefaultOperationAmountDistributionParameter": {
     "Mean": 4,
+    "Variance": 0.2
+  },
+  "DefaultSetupDurationDistributionParameter": {
+    "Mean": 10,
     "Variance": 0.2
   },
   "Value": "ResourceConfiguration"

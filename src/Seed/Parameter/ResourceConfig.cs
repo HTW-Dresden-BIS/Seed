@@ -10,11 +10,13 @@ namespace Seed.Parameter
         {
             DefaultOperationDurationDistributionParameter = new();
             DefaultOperationAmountDistributionParameter = new();
+            DefaultSetupDurationDistributionParameter = new();
             ResourceGroupList = new();
         }
         public List<ResourceGroup> ResourceGroupList { get; set; }
         public DistributionParameter DefaultOperationDurationDistributionParameter { get; set; }
         public DistributionParameter DefaultOperationAmountDistributionParameter { get; set; }
+        public DistributionParameter DefaultSetupDurationDistributionParameter { get; set; }
         public double DefaultCostRateIdleTime { get; set; }
         public double DefaultCostRateProcessing { get; set; }
         public double DefaultCostRateSetup { get; set; }
@@ -23,14 +25,24 @@ namespace Seed.Parameter
             return this.ResourceGroupList[resourceId].Tools;
         }
 
-        private bool CheckToolValue(int resourceIndex, int toolIndex)
+        private bool CheckToolOperationDurationParameterValue(int resourceIndex, int toolIndex)
         {
             return this.ResourceGroupList[resourceIndex].Tools[toolIndex].OperationDurationDistributionParameter.Mean != 0;
         }
 
-        private bool CheckResourceValue(int resourceIndex)
+        private bool CheckResourceOperationDurationParameterValue(int resourceIndex)
         {
             return this.ResourceGroupList[resourceIndex].OperationDurationDistributionParameter.Mean != 0;
+        }
+
+        private bool CheckToolSetupParameterValue(int resourceIndex, int toolIndex)
+        {
+            return this.ResourceGroupList[resourceIndex].Tools[toolIndex].SetupDurationDistributionParameter.Mean != 0;
+        }
+
+        private bool CheckResourceSetupParameterValue(int resourceIndex)
+        {
+            return this.ResourceGroupList[resourceIndex].SetupDurationDistributionParameter.Mean != 0;
         }
         /// <summary>
         /// Returns the Distribution from Config, with fallback > Tools > ResourceGroup > 10
@@ -40,13 +52,30 @@ namespace Seed.Parameter
         /// <returns></returns>
         public TimeSpan GetMeanOperationDurationFor(int resourceIndex, int toolIndex)
         {
-            return TimeSpan.FromSeconds(CheckToolValue(resourceIndex, toolIndex) ? 
+            return TimeSpan.FromSeconds(CheckToolOperationDurationParameterValue(resourceIndex, toolIndex) ? 
                                          this.ResourceGroupList[resourceIndex].Tools[toolIndex].OperationDurationDistributionParameter.Mean // Per Tool
-                                      : CheckResourceValue(resourceIndex) ? 
+                                      : CheckResourceOperationDurationParameterValue(resourceIndex) ? 
                                          this.ResourceGroupList[resourceIndex].OperationDurationDistributionParameter.Mean
                                       : DefaultOperationDurationDistributionParameter.Mean != 0 ?
                                          DefaultOperationDurationDistributionParameter.Mean
                                       : 10);         // Resource Default;
+        }
+
+        /// <summary>
+        /// Returns the Distribution from Config, with fallback > Tools > ResourceGroup > 0
+        /// </summary>
+        /// <param name="resourceIndex"></param>
+        /// <param name="toolIndex"></param>
+        /// <returns></returns>
+        public TimeSpan GetMeanSetupDurationFor(int resourceIndex, int toolIndex)
+        {
+            return TimeSpan.FromSeconds(CheckToolSetupParameterValue(resourceIndex, toolIndex) ?
+                                         this.ResourceGroupList[resourceIndex].Tools[toolIndex].SetupDurationDistributionParameter.Mean // Per Tool
+                                      : CheckResourceSetupParameterValue(resourceIndex) ?
+                                         this.ResourceGroupList[resourceIndex].SetupDurationDistributionParameter.Mean
+                                      : DefaultSetupDurationDistributionParameter.Mean != 0 ?
+                                         DefaultSetupDurationDistributionParameter.Mean
+                                      : 0);         // Resource Default;
         }
 
         public double GetCostRateIdleTimeFor(int resourceIndex)
@@ -72,11 +101,20 @@ namespace Seed.Parameter
 
         public double GetVarianceOperationDurationFor(int resourceIndex, int toolIndex)
         {
-            return CheckToolValue(resourceIndex, toolIndex) ?
+            return CheckToolOperationDurationParameterValue(resourceIndex, toolIndex) ?
                 this.ResourceGroupList[resourceIndex].Tools[toolIndex].OperationDurationDistributionParameter.Variance // Per Tool
-                : CheckResourceValue(resourceIndex) ? 
+                : CheckResourceOperationDurationParameterValue(resourceIndex) ? 
                 this.ResourceGroupList[resourceIndex].OperationDurationDistributionParameter.Variance
                 : DefaultOperationDurationDistributionParameter.Variance;    // No further check needed as int is 0 anyway
+        }
+
+        public double GetVarianceSetupDurationFor(int resourceIndex, int toolIndex)
+        {
+            return CheckToolSetupParameterValue(resourceIndex, toolIndex) ?
+                this.ResourceGroupList[resourceIndex].Tools[toolIndex].SetupDurationDistributionParameter.Variance // Per Tool
+                : CheckResourceSetupParameterValue(resourceIndex) ?
+                this.ResourceGroupList[resourceIndex].SetupDurationDistributionParameter.Variance
+                : DefaultSetupDurationDistributionParameter.Variance;    // No further check needed as int is 0 anyway
         }
 
         public ResourceConfig WithDefaultOperationsDurationVariance(double varianceInPercent)
@@ -87,6 +125,16 @@ namespace Seed.Parameter
         public ResourceConfig WithDefaultOperationsDurationMean(TimeSpan mean)
         {
             this.DefaultOperationDurationDistributionParameter.Mean = mean.TotalSeconds;
+            return this;
+        }
+        public ResourceConfig WithDefaultSetupDurationVariance(double varianceInPercent)
+        {
+            this.DefaultSetupDurationDistributionParameter.Variance = varianceInPercent;
+            return this;
+        }
+        public ResourceConfig WithDefaultSetupDurationMean(TimeSpan mean)
+        {
+            this.DefaultSetupDurationDistributionParameter.Mean = mean.TotalSeconds;
             return this;
         }
         public ResourceConfig WithDefaultOperationsAmountVariance(double varianceInPercent)

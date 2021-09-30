@@ -1,5 +1,4 @@
 ﻿using Seed.Parameter;
-using Seed.Parameter.Operation;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -30,7 +29,7 @@ namespace Seed.Test.DefaultConfiguration
         public void ImporterTest()
         {   
             var jsonText = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, @"Config", @"ResourceConfig.json"));
-            var inJson = System.Text.Json.JsonSerializer.Deserialize<ResourceConfig>(jsonText);
+            var inJson = JsonSerializer.Deserialize<ResourceConfig>(jsonText);
             Assert.NotNull(inJson);
         }
 
@@ -54,12 +53,17 @@ namespace Seed.Test.DefaultConfiguration
             var resourceGroups = Configuration.ReadFromFile<ResourceConfig>("ResourceConfig.json");
             var meanToolOperationFallback = resourceGroups.GetMeanOperationDurationFor(resourceIndex, toolIndex);
             var varianeToolOperationFallback = resourceGroups.GetVarianceOperationDurationFor(resourceIndex, toolIndex);
+            var meanSetupDuration = resourceGroups.GetMeanSetupDurationFor(resourceIndex, toolIndex);
+            var varianceSetupDuration = resourceGroups.GetVarianceSetupDurationFor(resourceIndex, toolIndex);
+            Assert.Equal(TimeSpan.FromSeconds(600), meanSetupDuration);
+            Assert.Equal(0.2, varianceSetupDuration);
             Assert.Equal(TimeSpan.FromSeconds(300), meanToolOperationFallback);
             Assert.Equal(0.2, varianeToolOperationFallback);
 
             Assert.Equal(100.0, resourceGroups.GetCostRateSetupFor(resourceIndex));
             Assert.Equal(60.0, resourceGroups.GetCostRateProcessingFor(resourceIndex));
             Assert.Equal(10.0, resourceGroups.GetCostRateIdleTimeFor(resourceIndex));
+            
         }
 
         [Fact] 
