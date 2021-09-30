@@ -20,7 +20,7 @@ jobs:
 
       # Build
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build src/Seed/Seed.csproj --configuration Release
         
       # Publish
       - name: publish on version change
