@@ -7,12 +7,12 @@ namespace Seed.Parameter.Operation
         public ResourceTool(string name) 
         {
             Name = name;
-            SetupDistributionParameter = new();
+            SetupDurationDistributionParameter = new();
             OperationDurationDistributionParameter = new();
         }
         public string Name { get; set; }
 
-        public DistributionParameter SetupDistributionParameter { get; set; }
+        public DistributionParameter SetupDurationDistributionParameter { get; set; }
         public DistributionParameter OperationDurationDistributionParameter { get; set; }
 
         public ResourceTool WithOperationDurationAverage(TimeSpan timeSpan)
@@ -27,12 +27,12 @@ namespace Seed.Parameter.Operation
         }
         public ResourceTool WithSetupDurationAverage(TimeSpan timeSpan)
         {
-            this.SetupDistributionParameter.Mean = timeSpan.TotalSeconds;
+            this.SetupDurationDistributionParameter.Mean = timeSpan.TotalSeconds;
             return this;
         }
         public ResourceTool WithSetupDurationVariance(double varianceInPercent)
         {
-            this.SetupDistributionParameter.Variance = varianceInPercent;
+            this.SetupDurationDistributionParameter.Variance = varianceInPercent;
             return this;
         }
 

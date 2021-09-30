@@ -9,6 +9,7 @@ namespace Seed.Parameter.Operation
         {
             Name = name;
             OperationDurationDistributionParameter = new();
+            SetupDurationDistributionParameter = new();
         }
 
         public string Name { get; set; }
@@ -17,16 +18,27 @@ namespace Seed.Parameter.Operation
         public double CostRateProcessing { get; set; }
         public double CostRateSetup { get; set; }
         public DistributionParameter OperationDurationDistributionParameter { get; set; }
+        public DistributionParameter SetupDurationDistributionParameter { get; set; }
         public List<ResourceTool> Tools { get; set; }
 
-        public ResourceGroup WithDefaultDurationMean(TimeSpan timeSpan)
+        public ResourceGroup WithDefaultOperationDurationMean(TimeSpan timeSpan)
         {
             this.OperationDurationDistributionParameter.Mean = timeSpan.TotalSeconds;
             return this;
         }
-        public ResourceGroup WithDefaultDurationVariance(double varianceInPercent)
+        public ResourceGroup WithDefaultOperationDurationVariance(double varianceInPercent)
         {
             this.OperationDurationDistributionParameter.Variance = varianceInPercent;
+            return this;
+        }
+        public ResourceGroup WithDefaultSetupDurationMean(TimeSpan timeSpan)
+        {
+            this.SetupDurationDistributionParameter.Mean = timeSpan.TotalSeconds;
+            return this;
+        }
+        public ResourceGroup WithDefaultSetupDurationVariance(double varianceInPercent)
+        {
+            this.SetupDurationDistributionParameter.Variance = varianceInPercent;
             return this;
         }
         public ResourceGroup WithTools(List<ResourceTool> tools)
