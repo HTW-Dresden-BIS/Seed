@@ -1,5 +1,4 @@
-﻿using Seed.Generator;
-using Seed.Parameter;
+﻿using Seed.Parameter;
 using Seed.Parameter.TransitionMatrix;
 using System;
 using System.Linq;
