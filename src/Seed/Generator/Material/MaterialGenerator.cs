@@ -106,7 +106,7 @@ namespace Seed.Generator.Material
                 while (currentLevelNodesWithoutEdges.Count > 0)
                 {
                     var edge = _unusedEdges.Dequeue();
-                    edge.From = lowerLevelNodes.GetNodeAt(_randomizer.Next(currentLevelNodesWithoutEdges.Count()));
+                    edge.From = lowerLevelNodes.GetNodeAt(_randomizer.Next(lowerLevelNodes.Count()));
                     edge.To = currentLevelNodesWithoutEdges.DequeueNode();
                     Materials.Edges.Add(edge);
                 }
