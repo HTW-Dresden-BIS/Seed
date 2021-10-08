@@ -26,7 +26,10 @@ namespace Seed.Data
 
         public MaterialNode GetNodeAt(int index)
         {
-            return this[index];
+            var node = this[index];
+            this.RemoveAt(index);
+            _nodeCollector.NodesInUse.Add(node);
+            return node;
         }
         public MaterialNode DequeueNode()
         {
