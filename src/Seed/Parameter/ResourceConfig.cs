@@ -20,9 +20,9 @@ namespace Seed.Parameter
         public double DefaultCostRateIdleTime { get; set; }
         public double DefaultCostRateProcessing { get; set; }
         public double DefaultCostRateSetup { get; set; }
-        public List<ResourceTool> GetToolsFor(int resourceId)
+        public List<ResourceTool> GetToolsFor(int resourceGroupIndex)
         {
-            return this.ResourceGroupList[resourceId].Tools;
+            return this.ResourceGroupList[resourceGroupIndex].Tools;
         }
 
         private bool CheckToolOperationDurationParameterValue(int resourceIndex, int toolIndex)

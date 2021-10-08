@@ -7,11 +7,11 @@ using System;
 
 namespace Seed.Generator.Operation
 {
-    public class OperationDistributor : IOperationDistributor, IWithTransitionMatrix, IWithRandomizerCollection, IWithResourceConfig, IWithMaterials
+    public class OperationDistributor : IOperationDistributor, IWithTransitionMatrix, IWithRandomizerCollection, IWithResourceConfig
     {
         private RandomizerCollection _randomizerCollection;
         private ResourceConfig _resourceGroups;
-        private IWithOperationsInUse _operationsInUse;
+        //private IWithOperationsInUse _operationsInUse;
         private bool _withSourceAndSink;
         private TransitionMatrix _matrix { get; set; }
         private int Source { get; set; }
@@ -42,11 +42,11 @@ namespace Seed.Generator.Operation
             return this;
         }
 
-        public IWithMaterials WithMaterials(IWithOperationsInUse operationsInUse)
-        {
-            _operationsInUse = operationsInUse;
-            return this;
-        }
+        //public IWithMaterials WithMaterials(IWithOperationsInUse operationsInUse)
+        //{
+     // //      _operationsInUse = operationsInUse;
+        //    return this;
+        //}
 
         public OperationDistributor Build()
         {
@@ -94,7 +94,7 @@ namespace Seed.Generator.Operation
                                                             , Duration = customDuration };
                 node.Operations.Add(operation);
 
-                _operationsInUse.Operations.Add(operation);
+                //_operationsInUse.Operations.Add(operation);
                 Source = targetResourceIndex;
             }
         }

@@ -12,7 +12,7 @@
     <Description>A Master Data gernerator for Products, Materials and Operations.</Description>
     <PackageProjectUrl>https://github.com/HTW-Dresden-BIS/Seed</PackageProjectUrl>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <Version>$(VersionPrefix)1.0.3</Version>
+    <Version>$(VersionPrefix)1.1.0</Version>
     <Company>Martin Krockert; Marvin Matthes</Company>
   </PropertyGroup>
 

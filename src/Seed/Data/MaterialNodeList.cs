@@ -16,6 +16,13 @@ namespace Seed.Data
         {
             NodeStoreage = this.ToArray();
         }
+        public MaterialNode GetAndRemoveNodeAt(int index)
+        {
+            var node = this[index];
+            this.RemoveAt(index);
+            _nodeCollector.NodesInUse.Add(node);
+            return node;
+        }
 
         public MaterialNode GetNodeAt(int index)
         {
@@ -26,16 +33,25 @@ namespace Seed.Data
         }
         public MaterialNode DequeueNode()
         {
-            var node = this[0];
-            this.RemoveAt(0);
-            _nodeCollector.NodesInUse.Add(node);
-            return node;
+            return GetAndRemoveNodeAt(0);
         }
 
         public int CountAll => NodeStoreage.Length;
         public MaterialNode GetNodeFromStorage(int index)
         {
             return NodeStoreage[index];
+        }
+
+        public MaterialNode[] AllNodes => NodeStoreage;
+        
+        /// <summary>
+        /// Transfers Remaining nodes to NodesInUse list.
+        /// </summary>
+        /// <returns></returns>
+        public void TransferNodesToNodesInUse()
+        {
+            _nodeCollector.NodesInUse.AddRange(this);
+            this.Clear();
         }
     }
 }

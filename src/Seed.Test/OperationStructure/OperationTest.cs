@@ -39,11 +39,10 @@ namespace Seed.Test.OperationStructure
                                                 .WithOperationDuration(new RandomizerLogNormal(Randomizer.Next(int.MaxValue)))
                                                 .WithOperationAmount(new RandomizerBinominial(Randomizer.Next(int.MaxValue)))
                                                 .Build();
-            var material = new Materials();
+           //var material = new Materials();
             var operationDistributor = OperationDistributor.WithTransitionMatrix(_operationFixture.TransitionMatrix)
                                                             .WithRandomizerCollection(randomizerCollection)
                                                             .WithResourceConfig(_operationFixture.ResourceConfig)
-                                                            .WithMaterials(material)
                                                             .Build(); 
 
             var materials = _operationFixture.CreateMaterials(numberOfOperations);
@@ -62,11 +61,12 @@ namespace Seed.Test.OperationStructure
           
 
             var og = generatedOperationsMatrix.GetOrganizationalDegree();
-            _numberOfOperationsCreated = material.Operations.Count;
-            var group = material.Operations.GroupBy(x => new { x.Node.Id }).Select(g => new { Key = g.Key, Count = g.Count() });
+            _numberOfOperationsCreated = materials.Sum(x => x.Operations.Count());
+            var operations =  materials.SelectMany(x => x.Operations);
+            var group = operations.GroupBy(x => new { x.Node.Id }).Select(g => new { Key = g.Key, Count = g.Count() });
             var average = group.Average(x => x.Count);
 
-            WriteIf(withOut, material.NodesInUse.Count() + " Materials created");
+            WriteIf(withOut, materials.Count() + " Materials created");
             WriteIf(withOut, _numberOfOperationsCreated + " Operations created");
             WriteIf(withOut, average + " Operations per Material " + group.Count());
             WriteIf(withOut, "Organizational Degree on Generated Matrix    : " + _operationFixture.TransitionMatrix.GetOrganizationalDegree());
@@ -74,7 +74,7 @@ namespace Seed.Test.OperationStructure
             _averageOg.Add(og);
             
             Assert.InRange(og, _operationFixture.OrganizationalDegree - 0.1, _operationFixture.OrganizationalDegree + 0.1);
-            Assert.True(material.Operations.TrueForAll(x => x.Duration.TotalSeconds != 0));
+            Assert.True(materials.ToList().TrueForAll(x => x.Operations.TrueForAll(y => y.Duration.TotalSeconds != 0)));
         }
 
 

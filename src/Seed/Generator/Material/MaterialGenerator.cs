@@ -100,19 +100,19 @@ namespace Seed.Generator.Material
         {
             for (int level = 0; level < Materials.Count -1; level++)
             {
-                var currentLevelNodesWithoutEdges = Materials[level].Nodes;
+                var currentLevelNodes = Materials[level].Nodes.AllNodes;
                 var lowerLevelNodes = Materials[level + 1].Nodes;
 
-                while (currentLevelNodesWithoutEdges.Count > 0)
+                foreach (var node in currentLevelNodes)
                 {
                     var edge = _unusedEdges.Dequeue();
-                    edge.From = lowerLevelNodes.GetNodeAt(_randomizer.Next(lowerLevelNodes.Count()));
-                    edge.To = currentLevelNodesWithoutEdges.DequeueNode();
+                    edge.From = lowerLevelNodes.GetAndRemoveNodeAt(_randomizer.Next(lowerLevelNodes.Count()));
+                    edge.To = node;
                     Materials.Edges.Add(edge);
                 }
             }
 
-            for (int level = Materials.Count - 1; level >= 2; level--)
+            for (int level = Materials.Count - 1; level >= 1; level--)
             {
                 var currentLevelNodesWithoutEdges = Materials[level].Nodes;
                 var decendingProbabilityMatrix = new ProbabilityByDistanceMatrix(
@@ -130,6 +130,7 @@ namespace Seed.Generator.Material
                 }
 
             }
+            Materials[0].Nodes.TransferNodesToNodesInUse();
             DistributeRemainingEdges();
         }
 
@@ -139,19 +140,19 @@ namespace Seed.Generator.Material
             var stages = Materials.Count;
             for (int level = stages - 1; level >= 2; level--)
             {
-                var currentLevelNodesWithoutEdges = Materials[level].Nodes;
+                var currentLevelNodes = Materials[level].Nodes.AllNodes;
                 var higherLevelNodes = Materials[level - 1].Nodes;
 
-                while (currentLevelNodesWithoutEdges.Count > 0)
+                foreach (var node in currentLevelNodes)
                 {
                     var edge = _unusedEdges.Dequeue();
-                    edge.From = currentLevelNodesWithoutEdges.DequeueNode();
-                    edge.To = higherLevelNodes.GetNodeAt(_randomizer.Next(higherLevelNodes.Count()));
+                    edge.From = node;
+                    edge.To = higherLevelNodes.GetAndRemoveNodeAt(_randomizer.Next(higherLevelNodes.Count()));
                     Materials.Edges.Add(edge);
                 }
             }
 
-            for (int level = 0; level < Materials.Count; level++)
+            for (int level = 0; level < Materials.Count - 1; level++)
             {
                 var currentLevelNodesWithoutEdges = Materials[level].Nodes;
                 var probabilityMatrix =
@@ -168,6 +169,7 @@ namespace Seed.Generator.Material
                     Materials.Edges.Add(edge);
                 }
             }
+            Materials[Materials.Count - 1].Nodes.TransferNodesToNodesInUse();
             DistributeRemainingEdges();
         }
 
