@@ -65,7 +65,7 @@ namespace Seed
             var operationDistributor = OperationDistributor.WithTransitionMatrix(transitionMatrix)
                                                             .WithRandomizerCollection(randomizerCollection)
                                                             .WithResourceConfig(resourceConfig)
-                                                            .WithMaterials(materials)
+          
                                                             .Build();
             
             var operationGenerator = OperationGenerator.WithOperationDistributor(operationDistributor)

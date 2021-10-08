@@ -31,7 +31,7 @@ namespace Seed.Generator.Material
  
         public MaterialNode[] NodesWithoutPurchase()
         {
-            return NodesInUse.Where(x => x.InitialLevel != this.Count - 1).ToArray();
+            return NodesInUse.Where(x => x.IncomingEdges.Any() && !x.OutgoingEdges.Any()).ToArray();
         }
         public MaterialNode[] NodesWithoutSales()
         {
@@ -39,13 +39,16 @@ namespace Seed.Generator.Material
         }
         public MaterialNode[] NodesSalesOnly()
         {
-            return NodesInUse.Where(x => x.InitialLevel == 0).ToArray();
+            return NodesInUse.Where(x => x.IncomingEdges.Any() && !x.OutgoingEdges.Any()).ToArray();
         }
         public MaterialNode[] NodesPurchaseOnly()
         {
-            return NodesInUse.Where(x => x.InitialLevel == this.Count - 1).ToArray();
+            return NodesInUse.Where(x => !x.IncomingEdges.Any() && x.OutgoingEdges.Any()).ToArray();
         }
-
+        public MaterialNode[] NodesAssemblyOnly()
+        {
+            return NodesInUse.Where(x => x.IncomingEdges.Any() && x.OutgoingEdges.Any()).ToArray();
+        }
         public static void CalculateCosts(MaterialEdge[] edges)
         {
             foreach (var edge in edges)

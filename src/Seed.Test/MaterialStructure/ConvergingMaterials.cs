@@ -24,13 +24,14 @@ namespace Seed.Test.MaterialStructure
         [Fact]
         public void NumberOfMaterialsPerLevel()
         {
-            double purchaseMaterials = _materialFixture.Materials.NodesPurchaseOnly().Length;
-            double salesMaterials = _materialFixture.Materials.NodesSalesOnly().Length;
+            int maxLevel = _materialFixture.Materials.Max(x => x.Level);
+            double salesMaterials = _materialFixture.Materials.NodesInUse.Where(x => x.InitialLevel == 0).Count();
+            double purchaseMaterials = _materialFixture.Materials.NodesInUse.Where(x => x.InitialLevel == maxLevel - 1).Count();
             foreach (var materialHirarchie in _materialFixture.Materials)
             {
                 var expected = 0.0;
                 if (materialHirarchie.Level == 1)
-                    expected = purchaseMaterials / (Math.Pow((double)msp.ComplexityRatio / msp.ReuseRatio, msp.VerticalIntegration - 1));
+                    expected = purchaseMaterials  / (Math.Pow((double)msp.ComplexityRatio / msp.ReuseRatio, msp.VerticalIntegration - 1));
                 else 
                     expected = salesMaterials * (Math.Pow((double)msp.ComplexityRatio / msp.ReuseRatio, materialHirarchie.Level - 1));
 
