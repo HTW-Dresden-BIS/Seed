@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Seed.Data
 {
@@ -18,12 +14,15 @@ namespace Seed.Data
 
         public int Id { get; set; }
         public string Name { get; set; }
+        [JsonIgnore]
         public TimeSpan Duration { get; set;}
+        public double DurationInSeconds { get => Duration.TotalSeconds; }
         public double Cost { get; set; }
         public int SequenceNumber { get; set; }
         public int TargetResourceIdent { get; set;}
         public int TargetToolIdent { get; set; }
         [JsonIgnore]
         public MaterialNode Node { get; set; }
+        public int NodeId => Node.Id;
     }
 }

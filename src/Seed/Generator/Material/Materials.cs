@@ -8,7 +8,7 @@ namespace Seed.Generator.Material
     public class Materials : List<MaterialHirachie>, IWithOperationsInUse, IWithNodeInUse
     {
         public List<MaterialNode> NodesInUse { get;  } = new List<MaterialNode>();
-        public List<MaterialNodeOperation> Operations { get; } = new List<MaterialNodeOperation>();
+        public List<MaterialNodeOperation> Operations { get => NodesInUse.SelectMany(x => x.Operations).ToList(); }
         public List<MaterialEdge> Edges {  get; } = new List<MaterialEdge>();
         public int CountDequeuedNodesFor(int level) => NodesInUse.Count(x => x.InitialLevel == level);
         /// <summary>
