@@ -1,6 +1,8 @@
-﻿using Seed.Distributions;
+﻿using MathNet.Numerics.Distributions;
+using Seed.Distributions;
 using Seed.Generator.Material;
 using Seed.Generator.Operation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -105,6 +107,18 @@ namespace Seed.Test.OperationStructure
             var matrix = transitionMatrix.TransformToProbability();
             _outputHelper.WriteLine(matrix.ToString());
             Assert.Equal(4, matrix.Column(3).AsArray().Sum(x => x));
+        }
+
+
+        [Fact(Skip = "Manual only")]
+        public void DistributionTest()
+        {
+            var rnd = new Random(1);
+            for (int i = 0; i < 1000; i++)
+            {
+                var val = LogNormal.WithMeanVariance(10, 2, rnd).Sample();
+                System.Diagnostics.Debug.WriteLine(val + " | " +  Math.Round(val));
+            }
         }
     }
 }

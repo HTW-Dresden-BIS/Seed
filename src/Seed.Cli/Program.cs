@@ -45,7 +45,7 @@ namespace Seed
         }
 
         // read config
-            public static void StartGenerating(Configuration seedConfig, IConfigurationRoot cliConfig)
+         public static void StartGenerating(Configuration seedConfig, IConfigurationRoot cliConfig)
         {
             var materialConfig = seedConfig.Get<MaterialConfig>();
             var resourceConfig = seedConfig.Get<ResourceConfig>();
